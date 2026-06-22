@@ -51,9 +51,9 @@ config = Config()
 class JepaMnistDataset(torch.utils.data.Dataset):
     def __init__(self, train=True):
         self.base_dataset = torchvision.datasets.MNIST(
-            root='./data', train=train, download=True, 
-            transform=transforms.ToTensor()
+            root='./data', train=train, download=True
         )
+        self.clean_transform = transforms.ToTensor()
         # Transform for View 2 (e.g. random rotation or noise)
         self.aug_transform = transforms.Compose([
             transforms.RandomRotation(45),
@@ -64,10 +64,9 @@ class JepaMnistDataset(torch.utils.data.Dataset):
         return len(self.base_dataset)
         
     def __getitem__(self, idx):
-        # We need PIL image for aug_transform, so we fetch it before transform
-        img, label = torchvision.datasets.MNIST(root='./data', train=self.base_dataset.train, download=False)[idx]
+        img, label = self.base_dataset[idx]
         
-        view_1 = transforms.ToTensor()(img)  # "Clean" or first view
+        view_1 = self.clean_transform(img)   # "Clean" or first view
         view_2 = self.aug_transform(img)     # "Augmented" or second view
         return view_1, view_2, label
 
