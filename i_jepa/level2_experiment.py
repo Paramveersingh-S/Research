@@ -46,6 +46,7 @@ config = Config()
 
 # @title 3. Dataset
 transform = transforms.Compose([
+    transforms.Resize((32, 32)),
     transforms.RandomHorizontalFlip(),
     transforms.ColorJitter(0.4, 0.4, 0.4, 0.1),
     transforms.ToTensor(),
