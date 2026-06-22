@@ -138,7 +138,25 @@ graph LR
 ---
 
 ## 🛠️ Implementation Strategy
+## 📈 Experimental Results (Colab Runs)
 
+Here are the actual training and evaluation graphs generated from our Colab T4 experiments!
+
+### 1. I-JEPA Representation Learning
+![I-JEPA Loss](assets/ijepa_loss.png)
+*Caption: I-JEPA successfully learning to predict contextual patches in latent space, dropping the Smooth L1 Loss from 0.13 to 0.075 on FashionMNIST.*
+
+### 2. Mamba (State Space Models)
+![Mamba Loss](assets/mamba_loss.png)
+*Caption: Mamba demonstrating stable autoregressive text generation loss reduction over 10 epochs.*
+
+### 3. V-JEPA 2 (Robotic Planning)
+![V-JEPA 2 Loss](assets/vjepa2_loss.png)
+*Caption: V-JEPA 2 learning an Action-Conditioned World Model, enabling zero-shot Model Predictive Control (MPC).*
+
+### 4. Scaling Test-Time Compute
+![Test-Time Compute](assets/test_time_compute.png)
+*Caption: Scaling compute at inference time. The Best-of-N search strategy perfectly solved a math reasoning problem that Greedy Decoding failed on, showing a 100% accuracy boost just by thinking longer.*
 For each paper, you will find:
 - `study_notes.md`: A plain-English explanation, visual mental models, prerequisites, and constraint-aware implementation plans.
 - `level1_poc.py`: A tiny toy version that proves the core idea works on a CPU in under 5 minutes.
