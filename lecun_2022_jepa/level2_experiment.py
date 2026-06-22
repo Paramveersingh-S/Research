@@ -51,14 +51,15 @@ config = Config()
 # View 2: Right half of the image (or heavily augmented version)
 class JepaCifarDataset(torch.utils.data.Dataset):
     def __init__(self, train=True):
-        from keras.datasets import cifar10
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-        if train:
-            self.data = x_train
-            self.targets = y_train.flatten()
-        else:
-            self.data = x_test
-            self.targets = y_test.flatten()
+        try:
+            from datasets import load_dataset
+        except ImportError:
+            import os
+            os.system("pip install datasets")
+            from datasets import load_dataset
+            
+        # HuggingFace datasets downloads from their fast CDN, bypassing the slow Toronto server
+        self.hf_dataset = load_dataset("cifar10", split="train" if train else "test")
             
         self.to_tensor = transforms.ToTensor()
         self.aug = transforms.Compose([
@@ -75,12 +76,17 @@ class JepaCifarDataset(torch.utils.data.Dataset):
         ])
 
     def __len__(self):
-        return len(self.data)
+        return len(self.hf_dataset)
         
     def __getitem__(self, idx):
-        from PIL import Image
-        img = Image.fromarray(self.data[idx])
-        label = self.targets[idx]
+        item = self.hf_dataset[idx]
+        img = item['img']
+        label = item['label']
+        
+        # Ensure img is RGB
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+            
         # JEPA standard self-supervised setup: two augmented views
         view_1 = self.aug(img)
         view_2 = self.aug(img)

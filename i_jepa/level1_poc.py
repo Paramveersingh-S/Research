@@ -53,23 +53,27 @@ transform = transforms.Compose([
 ])
 class FastCIFAR10(torch.utils.data.Dataset):
     def __init__(self, train=True, transform=None):
-        from keras.datasets import cifar10
-        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
-        if train:
-            self.data = x_train
-            self.targets = y_train.flatten()
-        else:
-            self.data = x_test
-            self.targets = y_test.flatten()
+        try:
+            from datasets import load_dataset
+        except ImportError:
+            import os
+            os.system("pip install datasets")
+            from datasets import load_dataset
+            
+        self.hf_dataset = load_dataset("cifar10", split="train" if train else "test")
         self.transform = transform
         
     def __len__(self):
-        return len(self.data)
+        return len(self.hf_dataset)
         
     def __getitem__(self, idx):
-        from PIL import Image
-        img = Image.fromarray(self.data[idx])
-        label = self.targets[idx]
+        item = self.hf_dataset[idx]
+        img = item['img']
+        label = item['label']
+        
+        if img.mode != 'RGB':
+            img = img.convert('RGB')
+            
         if self.transform:
             img = self.transform(img)
         return img, label
