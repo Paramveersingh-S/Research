@@ -51,42 +51,26 @@ config = Config()
 # View 2: Right half of the image (or heavily augmented version)
 class JepaCifarDataset(torch.utils.data.Dataset):
     def __init__(self, train=True):
-        try:
-            from datasets import load_dataset
-        except ImportError:
-            import os
-            os.system("pip install datasets")
-            from datasets import load_dataset
-            
-        # HuggingFace datasets downloads from their fast CDN, bypassing the slow Toronto server
-        self.hf_dataset = load_dataset("cifar10", split="train" if train else "test")
-            
-        self.to_tensor = transforms.ToTensor()
+        # We switch to FashionMNIST to completely avoid the throttled Toronto CIFAR-10 server.
+        # FashionMNIST is hosted on AWS S3 and downloads instantly.
+        self.base_dataset = torchvision.datasets.FashionMNIST(
+            root='./data', train=train, download=True
+        )
         self.aug = transforms.Compose([
+            transforms.Grayscale(num_output_channels=3), # Convert 1-channel to 3-channel to keep architecture identical
             transforms.RandomResizedCrop(32, scale=(0.2, 1.0)),
             transforms.RandomHorizontalFlip(),
             transforms.ColorJitter(0.4, 0.4, 0.4, 0.1),
-            transforms.RandomGrayscale(p=0.2),
             transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
-        ])
-        self.clean = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
         ])
 
     def __len__(self):
-        return len(self.hf_dataset)
+        return len(self.base_dataset)
         
     def __getitem__(self, idx):
-        item = self.hf_dataset[idx]
-        img = item['img']
-        label = item['label']
+        img, label = self.base_dataset[idx]
         
-        # Ensure img is RGB
-        if img.mode != 'RGB':
-            img = img.convert('RGB')
-            
         # JEPA standard self-supervised setup: two augmented views
         view_1 = self.aug(img)
         view_2 = self.aug(img)

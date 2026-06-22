@@ -51,28 +51,21 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
+# We switch to FashionMNIST to completely avoid the throttled Toronto CIFAR-10 server.
 class FastCIFAR10(torch.utils.data.Dataset):
     def __init__(self, train=True, transform=None):
-        try:
-            from datasets import load_dataset
-        except ImportError:
-            import os
-            os.system("pip install datasets")
-            from datasets import load_dataset
-            
-        self.hf_dataset = load_dataset("cifar10", split="train" if train else "test")
+        self.base_dataset = torchvision.datasets.FashionMNIST(
+            root='./data', train=train, download=True
+        )
         self.transform = transform
+        self.to_rgb = transforms.Grayscale(num_output_channels=3)
         
     def __len__(self):
-        return len(self.hf_dataset)
+        return len(self.base_dataset)
         
     def __getitem__(self, idx):
-        item = self.hf_dataset[idx]
-        img = item['img']
-        label = item['label']
-        
-        if img.mode != 'RGB':
-            img = img.convert('RGB')
+        img, label = self.base_dataset[idx]
+        img = self.to_rgb(img)
             
         if self.transform:
             img = self.transform(img)
