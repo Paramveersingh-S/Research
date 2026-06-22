@@ -56,8 +56,8 @@ class MovingMNISTDataset(torch.utils.data.Dataset):
         img = transforms.ToTensor()(img)
         frames = []
         for t in range(self.num_frames):
-            transform = transforms.AffineTransform(translation=(t % 14, t % 14))
-            frame = transform(img)
+            import torchvision.transforms.functional as TF
+            frame = TF.affine(img, angle=0.0, translate=[t % 14, t % 14], scale=1.0, shear=0.0)
             frames.append(frame)
         video = torch.stack(frames, dim=1)
         return video

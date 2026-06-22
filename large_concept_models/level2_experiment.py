@@ -33,12 +33,13 @@ if device == "cuda" or device == "cpu": # Can run on CPU for this toy dataset
     
     print("\nEncoding sentences into Concept Vectors...")
     # Convert sentences into continuous vectors
-    embeddings = encoder.encode(story, convert_to_tensor=True)
+    # We must clone() because sentence_transformers creates inference tensors
+    embeddings = encoder.encode(story, convert_to_tensor=True).clone()
     
     # X: Sentences 0 to 3
     # Y: Sentences 1 to 4 (The "Next Concept")
-    X = embeddings[:-1]
-    Y = embeddings[1:]
+    X = embeddings[:-1].requires_grad_(True)
+    Y = embeddings[1:].requires_grad_(False)
     
     # @title 4. The Large Concept Model (LCM)
     # A small MLP that predicts the next embedding vector
