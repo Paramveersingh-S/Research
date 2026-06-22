@@ -14,9 +14,6 @@ from tqdm import tqdm
 import os
 import copy
 
-# Fix for slow CIFAR-10 downloads from default Toronto servers
-torchvision.datasets.CIFAR10.url = "https://ossci-datasets.s3.amazonaws.com/cifar/cifar-10-python.tar.gz"
-
 def set_seed(seed=42):
     torch.manual_seed(seed)
     random.seed(seed)
