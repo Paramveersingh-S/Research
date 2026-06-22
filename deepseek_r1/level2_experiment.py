@@ -99,8 +99,6 @@ if device == "cuda":
         per_device_train_batch_size=1, # 1 prompt at a time
         gradient_accumulation_steps=4,
         num_generations=4,           # G=4: Generate 4 answers per prompt to compare!
-        max_prompt_length=128,
-        max_completion_length=128,   # Keep short for the POC
         logging_steps=1,
         remove_unused_columns=False,
         report_to="none"
