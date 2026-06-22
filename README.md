@@ -25,7 +25,7 @@ The implementation plan follows a curated track, building from foundational theo
 3. **[MC-JEPA & V-JEPA](v_jepa/)** ✅ *Completed*
    > Extending representation learning to motion and full video spatiotemporal cubes.
 
-4. **V-JEPA 2 (Robotics)** ⏳ *Planned*
+4. **[V-JEPA 2 (Robotics)](v_jepa_2/)** ✅ *Completed*
    > Zero-shot robotic manipulation using world models trained on web video.
 
 ### Part 2: Scaling, Reasoning, and Efficiency
@@ -35,14 +35,105 @@ The implementation plan follows a curated track, building from foundational theo
 6. **[DeepSeek-R1](deepseek_r1/)** ✅ *Completed*
    > Reinforcement learning for reasoning without supervised fine-tuning.
 
-7. **Scaling LLM Test-Time Compute** 🔄 *In Progress*
+7. **[Scaling LLM Test-Time Compute](test_time_compute/)** ✅ *Completed*
    > Best-of-N sampling and inference-time search to beat larger models.
 
-8. **Constitutional AI** ⏳ *Planned*
+8. **[Constitutional AI](constitutional_ai/)** ✅ *Completed*
    > Scalable oversight and self-revision for harmlessness.
 
-9. **Large Concept Models (LCMs)** ⏳ *Planned*
+9. **[Large Concept Models (LCMs)](large_concept_models/)** ✅ *Completed*
    > Autoregressive generation over semantic sentence embeddings.
+
+---
+
+## 📊 Architectural Graphs
+
+Here are the core architectures of the papers explored in this repository.
+
+### 1. The JEPA Architecture (LeCun 2022 / I-JEPA / V-JEPA)
+```mermaid
+graph TD
+    X[Context x] --> Enc[Encoder]
+    Y[Target y] --> TargetEnc[Target Encoder]
+    Z[Latent Variable z] --> Pred[Predictor]
+    
+    Enc --> sx[Representation sx]
+    TargetEnc --> sy[Representation sy]
+    
+    sx --> Pred
+    Pred --> sy_pred[Predicted sy]
+    
+    sy --> Loss((Loss))
+    sy_pred --> Loss
+    
+    style Enc fill:#1f77b4,color:#fff
+    style TargetEnc fill:#1f77b4,color:#fff
+    style Pred fill:#ff7f0e,color:#fff
+    style Loss fill:#d62728,color:#fff
+```
+*Caption: The core Joint-Embedding Predictive Architecture. Unlike standard networks that predict pixels (y), JEPA predicts the abstract representation of y (sy) in latent space.*
+
+### 2. DeepSeek-R1 GRPO (Group Relative Policy Optimization)
+```mermaid
+graph TD
+    Prompt[Prompt] --> Base[Base LLM]
+    Base --> O1[Output 1]
+    Base --> O2[Output 2]
+    Base --> On[Output N]
+    
+    O1 --> R1[Rule-based Reward]
+    O2 --> R2[Rule-based Reward]
+    On --> Rn[Rule-based Reward]
+    
+    R1 --> Adv[Normalize to Advantages]
+    R2 --> Adv
+    Rn --> Adv
+    
+    Adv --> PPO[PPO Clipping Objective]
+    KL[KL Divergence Penalty] --> PPO
+    
+    PPO --> Update[Update Base LLM Weights]
+    
+    style Base fill:#2ca02c,color:#fff
+    style R1 fill:#9467bd,color:#fff
+    style PPO fill:#d62728,color:#fff
+```
+*Caption: DeepSeek-R1's GRPO removes the need for an expensive Critic Model. It generates N outputs, scores them using logic/math rules, normalizes the scores, and updates the policy.*
+
+### 3. Scaling Test-Time Compute
+```mermaid
+graph LR
+    P[Prompt] --> LLM1[LLM]
+    LLM1 --> O1[Draft 1]
+    O1 --> Crit[Critique Draft 1]
+    Crit --> LLM2[LLM]
+    LLM2 --> O2[Draft 2]
+    O2 --> Crit2[Critique Draft 2]
+    Crit2 --> LLM3[LLM]
+    LLM3 --> Final[Final Answer]
+    
+    style LLM1 fill:#17becf,color:#fff
+    style Crit fill:#bcbd22,color:#fff
+```
+*Caption: Sequential Revision (Iterative Compute). Instead of scaling up the model parameters, we scale the time the model spends thinking and revising during inference.*
+
+### 4. Large Concept Models (LCMs)
+```mermaid
+graph LR
+    S1[Sentence 1 Text] --> SONAR1[SONAR Encoder]
+    SONAR1 --> V1[Concept Vector 1]
+    
+    V1 --> LCM[Continuous Space LCM]
+    LCM --> V2[Predicted Concept Vector 2]
+    
+    V2 --> SONAR2[SONAR Decoder]
+    SONAR2 --> S2[Sentence 2 Text]
+    
+    style SONAR1 fill:#8c564b,color:#fff
+    style LCM fill:#e377c2,color:#fff
+    style SONAR2 fill:#8c564b,color:#fff
+```
+*Caption: LCMs detach reasoning from language. A sentence is encoded into a high-dimensional concept, the LCM predicts the next concept, and the decoder translates it back to text.*
 
 ---
 
