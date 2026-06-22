@@ -157,6 +157,19 @@ Here are the actual training and evaluation graphs generated from our Colab T4 e
 ### 4. Scaling Test-Time Compute
 ![Test-Time Compute](assets/test_time_compute.png)
 *Caption: Scaling compute at inference time. The Best-of-N search strategy perfectly solved a math reasoning problem that Greedy Decoding failed on, showing a 100% accuracy boost just by thinking longer.*
+
+### 5. V-JEPA Representation Learning
+![V-JEPA Loss](assets/vjepa_loss.png)
+*Caption: V-JEPA successfully learning prediction over spatiotemporal video cubes, showing a steady decrease in prediction loss over 10 epochs.*
+
+### 6. Large Concept Models (LCM)
+![LCM Loss](assets/lcm_loss.png)
+*Caption: LCM achieving 0.00 loss on continuous trajectories and successfully generating concept predictions in the latent space.*
+
+### 7. DeepSeek-R1 (GRPO)
+![DeepSeek-R1 Reward](assets/deepseek_r1_reward.png)
+*Caption: DeepSeek-R1 optimizing rule-based reasoning rewards (GRPO), rapidly pushing the model reward to ~2.0.*
+
 For each paper, you will find:
 - `study_notes.md`: A plain-English explanation, visual mental models, prerequisites, and constraint-aware implementation plans.
 - `level1_poc.py`: A tiny toy version that proves the core idea works on a CPU in under 5 minutes.
