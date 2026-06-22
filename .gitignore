@@ -1,0 +1,5 @@
+paper_study_prompt.md
+ai_papers_and_jepa_guide.md
+.venv
+__pycache__/
+*.pyc
