@@ -32,10 +32,10 @@ The implementation plan follows a curated track, building from foundational theo
 5. **[Mamba & Mamba-2 (SSMs)](mamba_ssm/)** ✅ *Completed*
    > Replacing attention with selective state space models for linear-time scaling.
 
-6. **DeepSeek-R1** 🔄 *In Progress*
+6. **[DeepSeek-R1](deepseek_r1/)** ✅ *Completed*
    > Reinforcement learning for reasoning without supervised fine-tuning.
 
-7. **Scaling LLM Test-Time Compute** ⏳ *Planned*
+7. **Scaling LLM Test-Time Compute** 🔄 *In Progress*
    > Best-of-N sampling and inference-time search to beat larger models.
 
 8. **Constitutional AI** ⏳ *Planned*
