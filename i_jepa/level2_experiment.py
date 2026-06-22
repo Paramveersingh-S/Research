@@ -51,7 +51,30 @@ transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010)),
 ])
-train_dataset = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+class FastCIFAR10(torch.utils.data.Dataset):
+    def __init__(self, train=True, transform=None):
+        from keras.datasets import cifar10
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        if train:
+            self.data = x_train
+            self.targets = y_train.flatten()
+        else:
+            self.data = x_test
+            self.targets = y_test.flatten()
+        self.transform = transform
+        
+    def __len__(self):
+        return len(self.data)
+        
+    def __getitem__(self, idx):
+        from PIL import Image
+        img = Image.fromarray(self.data[idx])
+        label = self.targets[idx]
+        if self.transform:
+            img = self.transform(img)
+        return img, label
+
+train_dataset = FastCIFAR10(train=True, transform=transform)
 train_loader = DataLoader(train_dataset, batch_size=config.batch_size, shuffle=True, drop_last=True, num_workers=2)
 
 # @title 4. Model Architecture (ViT-Small inspired)

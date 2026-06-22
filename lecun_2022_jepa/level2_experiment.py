@@ -51,9 +51,15 @@ config = Config()
 # View 2: Right half of the image (or heavily augmented version)
 class JepaCifarDataset(torch.utils.data.Dataset):
     def __init__(self, train=True):
-        self.base_dataset = torchvision.datasets.CIFAR10(
-            root='./data', train=train, download=True
-        )
+        from keras.datasets import cifar10
+        (x_train, y_train), (x_test, y_test) = cifar10.load_data()
+        if train:
+            self.data = x_train
+            self.targets = y_train.flatten()
+        else:
+            self.data = x_test
+            self.targets = y_test.flatten()
+            
         self.to_tensor = transforms.ToTensor()
         self.aug = transforms.Compose([
             transforms.RandomResizedCrop(32, scale=(0.2, 1.0)),
@@ -69,10 +75,12 @@ class JepaCifarDataset(torch.utils.data.Dataset):
         ])
 
     def __len__(self):
-        return len(self.base_dataset)
+        return len(self.data)
         
     def __getitem__(self, idx):
-        img, label = self.base_dataset[idx]
+        from PIL import Image
+        img = Image.fromarray(self.data[idx])
+        label = self.targets[idx]
         # JEPA standard self-supervised setup: two augmented views
         view_1 = self.aug(img)
         view_2 = self.aug(img)
