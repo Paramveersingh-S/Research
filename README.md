@@ -16,23 +16,23 @@ Our goal is not just to read, but to **implement constraint-aware versions** of 
 The implementation plan follows a curated track, building from foundational theories to state-of-the-art applied models.
 
 ### Part 1: The JEPA Family (World Models & Representations)
-1. **[LeCun 2022 Position Paper](lecun_2022_jepa/)** 🔄 *In Progress*
+1. **[LeCun 2022 Position Paper](lecun_2022_jepa/)** ✅ *Completed*
    > *A Path Towards Autonomous Machine Intelligence.* Establishing the theoretical groundwork for predicting abstract representations.
    
-2. **I-JEPA** ⏳ *Planned*
+2. **[I-JEPA](i_jepa/)** ✅ *Completed*
    > *Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture.*
 
-3. **MC-JEPA & V-JEPA** ⏳ *Planned*
+3. **[MC-JEPA & V-JEPA](v_jepa/)** ✅ *Completed*
    > Extending representation learning to motion and full video spatiotemporal cubes.
 
 4. **V-JEPA 2 (Robotics)** ⏳ *Planned*
    > Zero-shot robotic manipulation using world models trained on web video.
 
 ### Part 2: Scaling, Reasoning, and Efficiency
-5. **Mamba & Mamba-2 (SSMs)** ⏳ *Planned*
+5. **[Mamba & Mamba-2 (SSMs)](mamba_ssm/)** ✅ *Completed*
    > Replacing attention with selective state space models for linear-time scaling.
 
-6. **DeepSeek-R1** ⏳ *Planned*
+6. **DeepSeek-R1** 🔄 *In Progress*
    > Reinforcement learning for reasoning without supervised fine-tuning.
 
 7. **Scaling LLM Test-Time Compute** ⏳ *Planned*
