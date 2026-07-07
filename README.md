@@ -7,7 +7,7 @@
 
 Welcome to my personal AI research and implementation repository. This project serves as a rigorous deep dive into the most foundational and high-impact papers in Artificial Intelligence—ranging from Joint-Embedding Predictive Architectures (JEPA) and world models, to reinforcement learning for reasoning, and State Space Models (SSMs).
 
-Our goal is not just to read, but to **implement constraint-aware versions** of every paper that can run on free-tier compute (Google Colab T4 GPUs, GitHub Codespaces CPUs).
+Our main goal is not just to read, but to **implement constraint-aware versions** of every paper that can run on free-tier compute (Google Colab T4 GPUs, GitHub Codespaces CPUs).
 
 ---
 
